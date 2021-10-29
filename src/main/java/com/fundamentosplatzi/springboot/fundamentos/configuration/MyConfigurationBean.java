@@ -28,7 +28,13 @@ public class MyConfigurationBean {
         return new MyBeanWithDependencyImplement(myOperation);
     }
     @Bean
+    public EmpresaInterface metodoImplInterfazWithDependency(MyOperation myOperation){
+        return new EmpresaInterfaceImpl(myOperation);
+    }
+
+    @Bean
     public InterfacePersona retornaPersona(){
         return new ImplementPersona();
     }
+
 }
