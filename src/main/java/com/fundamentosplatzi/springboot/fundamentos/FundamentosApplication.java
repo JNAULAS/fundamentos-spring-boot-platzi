@@ -1,11 +1,9 @@
 package com.fundamentosplatzi.springboot.fundamentos;
 
-import com.fundamentosplatzi.springboot.fundamentos.bean.InterfacePersona;
-import com.fundamentosplatzi.springboot.fundamentos.bean.MyBean;
-import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithDependency;
-import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithProperties;
+import com.fundamentosplatzi.springboot.fundamentos.bean.*;
 import com.fundamentosplatzi.springboot.fundamentos.component.ComponentDependencyInterface;
 import com.fundamentosplatzi.springboot.fundamentos.component.ComponentTwoImplement;
+import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -21,17 +19,22 @@ public class FundamentosApplication implements CommandLineRunner {
     private MyBeanWithDependency myBeanWithDependency;
     private InterfacePersona interfacePersona;
     private MyBeanWithProperties myBeanWithProperties;
+    private EmpresaInterface empresaInterface;
+    @Autowired
+    private UserPojo userPojo;
 
     //Creamos el constructor y este recibe como parametro mi dependencia para poderlo inyectar
     // @Autowired - Esta anotacón ya no es obligatorio en versiones reciente.
-    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona,MyBeanWithProperties myBeanWithProperties) {
+    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona, MyBeanWithProperties myBeanWithProperties, EmpresaInterface empresaInterface) {
         //Igualamos nuestra variable de tipo dependencia inyectada de nuestra clase al parametro de entrada en el constructor
         //this.dependencia = parametro de entrada.
         this.componentDependencyInterface = componentDependencyInterface;
         this.myBean = myBean;
-        this.myBeanWithDependency=myBeanWithDependency;
+        this.myBeanWithDependency = myBeanWithDependency;
         this.interfacePersona = interfacePersona;
         this.myBeanWithProperties = myBeanWithProperties;
+        this.empresaInterface = empresaInterface;
+        //this.userPojo = userPojo;
 
     }
 
@@ -46,7 +49,11 @@ public class FundamentosApplication implements CommandLineRunner {
         myBean.print();
         //Llamamos a la implementación y llamamos al metodo implemetado
         myBeanWithDependency.printWithDependency();
-        interfacePersona.bienvenida("Juan Gabriel Naula",36);
+        empresaInterface.imprimeEmpresa();
+        interfacePersona.bienvenida("Juan Gabriel Naula", 36);
         System.out.println(myBeanWithProperties.function());
+        //Uso de nuestro projo
+        System.out.println("Sus datos de ingreso son: User: "+"\n"+userPojo.getEmail()+"\n"+" Password: "+userPojo.getPassword()+"\n"+"Se edad es:"+userPojo.getAge());
+
     }
 }
