@@ -87,8 +87,20 @@ public class FundamentosApplication implements CommandLineRunner {
         userRepository.findByName("Jhon")
                 .stream().forEach(user -> LOGGER.info("Resultado de query methods: " + user));
 
-        LOGGER.info( "El User con Optional es: "+userRepository.findByEmailAndName("juliek@hotmail.com","Julie")
+        LOGGER.info("El User con Optional es: " + userRepository.findByEmailAndName("julie@hotmail.com", "Julie")
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrato por name and email")));
+
+        userRepository.findByNameLike("%J%").stream().forEach(user -> LOGGER.info("Usuario con Like es: " + user));
+        userRepository.findByNameOrEmail(null, "jhon@hotmail.com").stream().forEach(user -> LOGGER.info("Usuario con name or email es: " + user));
+
+        userRepository.findByBirthDateBetween(LocalDate.of(2021, 10, 10), LocalDate.of(2021, 10, 30)).stream().forEach(user -> LOGGER.info("Usuario con between o rango de fechas: " + user));
+        //Debemos enviar la cadena para concatenar con el like
+        userRepository.findByNameLikeOrderByIdDesc("%J%").stream().forEach(user -> LOGGER.info("findByNameLikeOrderByIdDesc: " + user));
+        // Uso de withMethods con Containing
+        userRepository.findByNameContainingOrderByIdDesc("J").stream().forEach(user -> LOGGER.info("findByNameContainingOrderByIdDesc: " + user));
+        // Consulta de metodo con uso de @Param asignado a paramero de metodo
+        LOGGER.info("Consulta de metodo con @param: " + userRepository.getAllByBirthDateAndEmail(LocalDate.of(2021, 10, 27), "jhon@hotmail.com")
+                .orElseThrow(() -> new RuntimeException("No se encuentro el usuario")));
     }
 
     //
