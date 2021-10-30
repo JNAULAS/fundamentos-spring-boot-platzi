@@ -1,10 +1,12 @@
 package com.fundamentosplatzi.springboot.fundamentos.repository;
 
 import com.fundamentosplatzi.springboot.fundamentos.entity.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 //Extendemos de la interfaz JpaRepository que recibe dos parametros (entidad a mapear, y el tipo de dato del id de la entidad)
@@ -16,4 +18,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     // Usamos la anotacion @Query y aqui agregamos la consulta JPQL
     @Query("SELECT u FROM User u  WHERE u.email=?1")
     Optional<User> findByUserEmail (String email);
+
+
+    //Uso de libreria import org.springframework.data.domain.Sort;
+    @Query("SELECT u FROM User u WHERE u.name LIKE ?1%")//Metodo que busca y ordena.
+    List<User> findAndSort(String name, Sort sort);
 }
