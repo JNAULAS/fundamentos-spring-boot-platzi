@@ -38,7 +38,7 @@ public class FundamentosApplication implements CommandLineRunner {
 
     //Creamos el constructor y este recibe como parametro mi dependencia para poderlo inyectar
     // @Autowired - Esta anotacón ya no es obligatorio en versiones reciente.
-    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona, MyBeanWithProperties myBeanWithProperties, EmpresaInterface empresaInterface,UserRepository userRepository) {
+    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona, MyBeanWithProperties myBeanWithProperties, EmpresaInterface empresaInterface, UserRepository userRepository) {
         //Igualamos nuestra variable de tipo dependencia inyectada de nuestra clase al parametro de entrada en el constructor
         //this.dependencia = parametro de entrada.
         this.componentDependencyInterface = componentDependencyInterface;
@@ -47,8 +47,7 @@ public class FundamentosApplication implements CommandLineRunner {
         this.interfacePersona = interfacePersona;
         this.myBeanWithProperties = myBeanWithProperties;
         this.empresaInterface = empresaInterface;
-        //this.userPojo = userPojo;
-        this.userRepository=userRepository;
+        this.userRepository = userRepository;
 
     }
 
@@ -60,18 +59,28 @@ public class FundamentosApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //ejemplosAnteriores();
         saveUserInDataBase();
+        getInformationJpqlFromUser();
     }
+
     //Metodo para guardar informacion
-    private void saveUserInDataBase(){
+    private void saveUserInDataBase() {
         //Entidad variable = creamos una instancia a partir del constructor
-        User user1 = new User("Jhon","jhon@hotmail.com", LocalDate.of(2021,10,27));
-        User user2 = new User("Julie","julie@hotmail.com", LocalDate.of(2021,10,28));
-        User user3 = new User("Daniela","daniela@hotmail.com", LocalDate.of(2021,10,29));
+        User user1 = new User("Jhon", "jhon@hotmail.com", LocalDate.of(2021, 10, 27));
+        User user2 = new User("Julie", "julie@hotmail.com", LocalDate.of(2021, 10, 28));
+        User user3 = new User("Daniela", "daniela@hotmail.com", LocalDate.of(2021, 10, 29));
         //Creamos una lista para poder guardar mas rapido
-        List<User> listUser = Arrays.asList(user1,user2,user3);
+        List<User> listUser = Arrays.asList(user1, user2, user3);
 
         // utilizamos nuestro stream de java y por cada uno de nuestros usuarios realizamos un registro en la base de datos :: save
         listUser.stream().forEach(userRepository::save);
+    }
+
+    //
+    private void getInformationJpqlFromUser() {
+        // si no existe vamos caso contrario lasce una exception + expresion landa (() ->) lanzamos una instancia de  RuntimeException
+        LOGGER.info("Usuario existente: " +
+                userRepository.findByUserEmail("jhona@hotmail.com")
+                        .orElseThrow(() -> new RuntimeException("No se encontro el Usuario")));
     }
 
     public void ejemplosAnteriores() {
