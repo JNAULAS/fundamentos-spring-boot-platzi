@@ -1,5 +1,6 @@
 package com.fundamentosplatzi.springboot.fundamentos.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ public class Post {
 
     //Relacionamos con otra entidad que se llama usuario.
     @ManyToOne //Relacion ManyToOne porque muchos post tiene un Usuario
+    @JoinColumn(name = "id_user")
+    @JsonBackReference
     private User user;
 
     public Post() {
