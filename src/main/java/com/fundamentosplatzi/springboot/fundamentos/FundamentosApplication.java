@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,13 +74,21 @@ public class FundamentosApplication implements CommandLineRunner {
 
         // utilizamos nuestro stream de java y por cada uno de nuestros usuarios realizamos un registro en la base de datos :: save
         listUser.stream().forEach(userRepository::save);
+
+        /*
+        Consulta y ordena la lista (letra a buscar, parametro de la clase sort para que se ordene a partir de una propiedad e indicamos si es descendente o ascendente)
+        realizo .stream() y por cada propiedad voy a mostrar mi usuario  en los logs con nivel info
+         */
+
+        userRepository.findAndSort("J", Sort.by("id").descending())
+                .stream().forEach(J -> LOGGER.info("Retorno con  metodo sort: " + J));
     }
 
     //
     private void getInformationJpqlFromUser() {
-        // si no existe vamos caso contrario lasce una exception + expresion landa (() ->) lanzamos una instancia de  RuntimeException
+        // si no existe vamos caso contrario lasce una exception + expresion lambda (() ->) lanzamos una instancia de  RuntimeException
         LOGGER.info("Usuario existente: " +
-                userRepository.findByUserEmail("jhona@hotmail.com")
+                userRepository.findByUserEmail("jhon@hotmail.com")
                         .orElseThrow(() -> new RuntimeException("No se encontro el Usuario")));
     }
 
