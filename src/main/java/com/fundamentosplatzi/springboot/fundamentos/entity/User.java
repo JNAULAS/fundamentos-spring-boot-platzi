@@ -25,7 +25,7 @@ public class User {
     private LocalDate birthDate;//Permite utilizar Java 8
 
     //Representamos la relacion con la entidad Post
-    @OneToMany(mappedBy = "user") // Un usuario tiene muchos post, "user" esta es la propiedad que representa al usuario en la entidad post, el tipo de cacade va a ser todo, y tenemos un FetchTyoe=EAGER
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER) // Un usuario tiene muchos post, "user" esta es la propiedad que representa al usuario en la entidad post, el tipo de cacade va a ser todo, y tenemos un FetchTyoe=EAGER
     @JsonManagedReference // Anotacion para que cuando se acceda al servicio a nivel servico rest no nos de un error relacionado con Stack OverFlow
     private List<Post> posts = new ArrayList<>();//Retornamos una lista y le inicializamos con un array list
 
