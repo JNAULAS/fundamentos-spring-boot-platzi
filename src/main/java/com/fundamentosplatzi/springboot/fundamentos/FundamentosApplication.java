@@ -49,6 +49,10 @@ public class FundamentosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        ejemplosAnteriores();
+    }
+
+    public void ejemplosAnteriores() {
         componentDependencyInterface.saludar();
         //Llamado a la implementacion
         myBean.print();
@@ -58,13 +62,13 @@ public class FundamentosApplication implements CommandLineRunner {
         interfacePersona.bienvenida("Juan Gabriel Naula", 36);
         System.out.println(myBeanWithProperties.function());
         //Uso de nuestro projo
-        System.out.println("Sus datos de ingreso son: User: "+"\n"+userPojo.getEmail()+"\n"+" Password: "+userPojo.getPassword()+"\n"+"Se edad es:"+userPojo.getAge());
+        System.out.println("Sus datos de ingreso son: User: " + "\n" + userPojo.getEmail() + "\n" + " Password: " + userPojo.getPassword() + "\n" + "Se edad es:" + userPojo.getAge());
         LOGGER.error("Representa un error del aplicativo");
-        try{
-            int valor = 10/0;
-            LOGGER.debug("Mi valor es:"+valor);
-        }catch (Exception e){
-            LOGGER.error("Error presentado al dividir por cero: "+ e.getMessage());
+        try {
+            int valor = 10 / 0;
+            LOGGER.debug("Mi valor es:" + valor);
+        } catch (Exception e) {
+            LOGGER.error("Error presentado al dividir por cero: " + e.getMessage());
         }
     }
 }
