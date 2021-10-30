@@ -5,8 +5,11 @@ import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithPropertiesImp
 import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @Configuration
 /*
@@ -26,5 +29,18 @@ public class GeneralConfiguration {
     @Bean
     public MyBeanWithProperties function() {
         return new MyBeanWithPropertiesImplement(name, apellido);
+    }
+    //Bean para configurar nuestra base de datos: Para construir utilizamos  DataSourceBuilder
+    // DataSource es una interfaz, entonces cuando inyectemos esta dependencia nosotros ya podemos utilizar toda esta configuracion
+    // Invertimos el control para que spring boot nos inyecte esta dependencia.
+    @Bean
+    public DataSource dataSource(){
+        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.driverClassName("org.h2.Driver");//Driver
+        dataSourceBuilder.url("jdbc:h2:mem:testdb");//Url a nivel de base de datos
+        dataSourceBuilder.username("SA");
+        dataSourceBuilder.password("");
+        //Retorna la configuracion construida
+        return  dataSourceBuilder.build();
     }
 }
