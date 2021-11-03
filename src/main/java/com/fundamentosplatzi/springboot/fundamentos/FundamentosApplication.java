@@ -6,6 +6,7 @@ import com.fundamentosplatzi.springboot.fundamentos.component.ComponentTwoImplem
 import com.fundamentosplatzi.springboot.fundamentos.entity.User;
 import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
+import com.fundamentosplatzi.springboot.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,11 @@ public class FundamentosApplication implements CommandLineRunner {
     @Autowired
     private UserPojo userPojo;
     private UserRepository userRepository;
+    private UserService userService;
 
     //Creamos el constructor y este recibe como parametro mi dependencia para poderlo inyectar
     // @Autowired - Esta anotacón ya no es obligatorio en versiones reciente.
-    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona, MyBeanWithProperties myBeanWithProperties, EmpresaInterface empresaInterface, UserRepository userRepository) {
+    public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependencyInterface componentDependencyInterface, MyBean myBean, MyBeanWithDependency myBeanWithDependency, InterfacePersona interfacePersona, MyBeanWithProperties myBeanWithProperties, EmpresaInterface empresaInterface, UserRepository userRepository,UserService userService) {
         //Igualamos nuestra variable de tipo dependencia inyectada de nuestra clase al parametro de entrada en el constructor
         //this.dependencia = parametro de entrada.
         this.componentDependencyInterface = componentDependencyInterface;
@@ -49,6 +51,8 @@ public class FundamentosApplication implements CommandLineRunner {
         this.myBeanWithProperties = myBeanWithProperties;
         this.empresaInterface = empresaInterface;
         this.userRepository = userRepository;
+        this.userService = userService;
+
 
     }
 
@@ -61,6 +65,7 @@ public class FundamentosApplication implements CommandLineRunner {
         //ejemplosAnteriores();
         saveUserInDataBase();
         getInformationJpqlFromUser();
+        saveWithErrorTransactional();//Registro de usuarios con uso de @Transactional
     }
 
     //Metodo para guardar informacion
@@ -129,5 +134,23 @@ public class FundamentosApplication implements CommandLineRunner {
         } catch (Exception e) {
             LOGGER.error("Error presentado al dividir por cero: " + e.getMessage());
         }
+    }
+    //Metodo para guardar información haciendo uso del transactional
+    public void saveWithErrorTransactional(){
+        User user1 = new User("UserTransactional1","userTransactional1@yahoo.com",LocalDate.now());
+        User user2 = new User("UserTransactional2","userTransactional2@yahoo.com",LocalDate.now());
+        User user3 = new User("UserTransactional3","userTransactional3@yahoo.com",LocalDate.now());
+        User user4 = new User("UserTransactional4","userTransactional3@yahoo.com",LocalDate.now());
+        User user5 = new User("UserTransactional5","userTransactional4@yahoo.com",LocalDate.now());
+
+        List<User> users = Arrays.asList(user1, user2, user3, user4, user5);
+        try {
+            userService.saveTransactional(users);
+        }catch (Exception e){
+            LOGGER.error("Se a producido un error al realizar el registro en la base de datos causado por: "+e.getMessage());
+        }
+            userService.getAllUsers()
+                    .stream().forEach(userRetorno -> LOGGER.info("Retorno user luego de transacctional: "+userRetorno));
+
     }
 }
