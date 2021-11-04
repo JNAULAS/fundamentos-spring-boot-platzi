@@ -12,7 +12,8 @@ import java.util.List;
 public class User {
     @Id//Representa la entidad a nivel de la tabla
     @GeneratedValue(strategy = GenerationType.AUTO)//Indica que se va a auto incrementar los codigos.
-    @Column (name = "id_user", nullable = false,unique = true)//Indicamos el nombre de la columna de la tabla, que no acepte nulos y que su valor sea unico, esto evita tener valores duplicados.
+    @Column(name = "id_user", nullable = false, unique = true)
+//Indicamos el nombre de la columna de la tabla, que no acepte nulos y que su valor sea unico, esto evita tener valores duplicados.
     private Long id;//Representamos la columna de la base de datos como una propiedad a nivel de clase
 
     @Column(length = 50)
@@ -25,8 +26,10 @@ public class User {
     private LocalDate birthDate;//Permite utilizar Java 8
 
     //Representamos la relacion con la entidad Post
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER) // Un usuario tiene muchos post, "user" esta es la propiedad que representa al usuario en la entidad post, el tipo de cacade va a ser todo, y tenemos un FetchTyoe=EAGER
-    @JsonManagedReference // Anotacion para que cuando se acceda al servicio a nivel servico rest no nos de un error relacionado con Stack OverFlow
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // Un usuario tiene muchos post, "user" esta es la propiedad que representa al usuario en la entidad post, el tipo de cacade va a ser todo, y tenemos un FetchTyoe=EAGER
+    @JsonManagedReference
+    // Anotacion para que cuando se acceda al servicio a nivel servico rest no nos de un error relacionado con Stack OverFlow
     private List<Post> posts = new ArrayList<>();//Retornamos una lista y le inicializamos con un array list
 
     public User() {
@@ -36,6 +39,10 @@ public class User {
         this.name = name;
         this.email = email;
         this.birthDate = birthDate;
+    }
+
+    public User(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -77,6 +84,7 @@ public class User {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
     //Generamos el metod ToString, para lo cual click derecho Generate, metodo ToString
     @Override
     public String toString() {
