@@ -5,6 +5,7 @@ import com.fundamentosplatzi.springboot.fundamentos.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 //Extendemos de la interfaz JpaRepository que recibe dos parametros (entidad a mapear, y el tipo de dato del id de la entidad)
 @Repository//Estereotipo utilizado para inyectar esta interfaz (UserRepository) como dependencia.
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     //Metodos con el uso de JPQL
     //Optional ==> Permite realizar el manejo de null
     // Devolvemos un User , nombre de metodo y parametros que recibe
@@ -60,4 +61,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " AND u.email =:parameterEmail"
     )
     Optional<UserDTO> getAllByBirthDateAndEmail(@Param("parameterFecha") LocalDate date, @Param("parameterEmail") String email);
+
+    List<User> findAll();
 }
